@@ -2,6 +2,65 @@
 	<head>
 	</head>
 	<body>
-		Java POJO with a Builder
+		<h1>Online Java POJO with a Builder</h1>
+		<table>
+			<tr>
+				<td>Class name:</td>
+				<td><input type="text" name="txtClassName" value="User"/></td>
+			</tr>
+		</table>
+		<table id="tblFields">
+			<tr>
+				<th>Name</th>
+				<th>Final</th>
+				<th>Type</th>
+				<th>Remove</th>
+			</tr>
+			<tr>
+				<td><input type="text" value="username"/></td>
+				<td><input type="checkbox"></td>
+				<td><input type="text" value="String"/></td>
+				<td><button type="button">Remove</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button type="button">Add Field</button></td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><button type="button">Generate POJO</button></td>
+			</tr>
+		</table>
+		<h2>Result:</h2>
+		<textarea rows="100" cols="100" style="overflow-y: scroll;">
+public class User {
+	
+	private final String username;
+	
+	private User(Builder builder) {
+		this.username = builder.username;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public class Builder {
+	
+		private String username;
+		
+		public Builder withUsername(String username) {
+			this.username = username;
+			return this;
+		}
+		
+		public User build() {
+			return new User(this);
+		}
+	}
+}
+		</textarea>
 	</body>
 </html>
