@@ -1,5 +1,6 @@
 <html>
 	<head>
+		<script src="./js/javaPOJOBuilder.js"></script>
 	</head>
 	<body>
 		<h1>Online Java POJO with a Builder</h1>
@@ -34,33 +35,6 @@
 			</tr>
 		</table>
 		<h2>Result:</h2>
-		<textarea rows="100" cols="100" style="overflow-y: scroll;">
-public class User {
-	
-	private final String username;
-	
-	private User(Builder builder) {
-		this.username = builder.username;
-	}
-	
-	public String getUsername() {
-		return username;
-	}
-	
-	public class Builder {
-	
-		private String username;
-		
-		public Builder withUsername(String username) {
-			this.username = username;
-			return this;
-		}
-		
-		public User build() {
-			return new User(this);
-		}
-	}
-}
-		</textarea>
+		<textarea id="txtResult" rows="100" cols="100" style="overflow-y: scroll;"></textarea>
 	</body>
 </html>
