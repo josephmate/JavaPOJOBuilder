@@ -17,21 +17,34 @@
 				<th>Type</th>
 				<th>Remove</th>
 			</tr>
-			<tr>
-				<td><input type="text" value="username"/></td>
-				<td><input type="checkbox"></td>
-				<td><input type="text" value="String"/></td>
-				<td><button type="button">Remove</button></td>
+			<tr id="trField0">
+				<td>
+					<input 
+			 			id="txtFieldName0"
+				 		type="text"
+				 		value="username"
+						oninput="changeFieldName(0)" />
+				</td>
+				<td>
+					<input 
+						id="chkFieldIsFinal0"
+						type="checkbox"
+						checked="true" 
+						onchange="changeFieldIsFinal(0)"/>
+				</td>
+				<td>
+					<input
+						id="chkFieldType0"
+						type="text"
+						value="String"
+						oninput="changeFieldType(0)"/>
+				</td>
+				<td><button type="button" onclick="removeField(0)">Remove</button></td>
 			</tr>
 		</table>
 		<table>
 			<tr>
-				<td><button type="button">Add Field</button></td>
-			</tr>
-		</table>
-		<table>
-			<tr>
-				<td><button type="button">Generate POJO</button></td>
+				<td><button type="button" onclick="addField()">Add Field</button></td>
 			</tr>
 		</table>
 		<h2>Result:</h2>

@@ -1,6 +1,7 @@
 function Data() {
 	this.className = "User";
-	this.fields = [new Field("username", true, "String")];
+	this.fields = {};
+	this.fields[0] = new Field("username", true, "String");
 }
 
 function Field(name, isFinal, type) {
@@ -10,6 +11,94 @@ function Field(name, isFinal, type) {
 }
 
 var data = new Data();
+var lastRowAdded = 0;
+
+function removeField(rowIdx) {
+	delete data.fields[rowIdx];
+	var trField = document.getElementById('trField' + rowIdx);
+	trField.parentNode.removeChild(trField);
+	updateResult();
+}
+
+function changeFieldName(rowIdx) {
+	var field = data.fields[rowIdx];
+	var txtFieldName = document.getElementById('txtFieldName' + rowIdx);
+	field.name = txtFieldName.value;
+	updateResult();
+}
+
+function changeFieldIsFinal(rowIdx) {
+	var field = data.fields[rowIdx];
+	var chkFieldIsFinal = document.getElementById('chkFieldIsFinal' + rowIdx);
+	field.isFinal = chkFieldIsFinal.checked;
+	updateResult();
+}
+
+function changeFieldType(rowIdx) {
+	var field = data.fields[rowIdx];
+	var txtFieldType = document.getElementById('txtFieldType' + rowIdx);
+	field.type = txtFieldType.value;
+	updateResult();
+}
+
+function addField() {
+	lastRowAdded++;
+	var currentRow = lastRowAdded;
+	
+	data.fields[lastRowAdded] = new Field("fieldName" + lastRowAdded, true, "String");
+
+	var trField = document.createElement("tr");
+	trField.id = "trField" + lastRowAdded;
+
+	var tdFieldName = document.createElement("td");
+	var txtFieldName = document.createElement("input");
+	txtFieldName.id = "txtFieldName" + lastRowAdded;
+	txtFieldName.type = "text";
+	txtFieldName.value = "fieldName" + lastRowAdded;
+	txtFieldName.oninput = function() {
+		changeFieldName(currentRow);	
+	};
+	tdFieldName.appendChild(txtFieldName);
+	trField.appendChild(tdFieldName);
+
+	var tdFieldFinal = document.createElement("td");
+	var chkFieldFinal = document.createElement("input");
+	chkFieldFinal.id = "chkFieldIsFinal" + lastRowAdded;
+	chkFieldFinal.type = "checkbox";
+	chkFieldFinal.checked = true;
+	chkFieldFinal.onchange = function() {
+		changeFieldIsFinal(currentRow);	
+	};
+	tdFieldFinal.appendChild(chkFieldFinal);
+	trField.appendChild(tdFieldFinal);
+
+	var tdFieldType = document.createElement("td");
+	var txtFieldType = document.createElement("input");
+	txtFieldType.id = "txtFieldType" + lastRowAdded;
+	txtFieldType.type = "text";
+	txtFieldType.value = "String";
+	txtFieldType.oninput = function() {
+		changeFieldType(currentRow);	
+	};
+	tdFieldType.appendChild(txtFieldType);
+	trField.appendChild(tdFieldType);
+
+	var tdRemoveField = document.createElement("td");
+	var btnRemoveField = document.createElement("button");
+	btnRemoveField.type = "button";
+	btnRemoveField.value = "String";
+	btnRemoveField.onclick = function() {
+		removeField(currentRow);	
+	};
+	btnRemoveField.innerHTML = "Remove";
+	tdRemoveField.appendChild(btnRemoveField);
+	trField.appendChild(tdRemoveField);
+
+	var tblFields = document.getElementById('tblFields');
+	tblFields.appendChild(trField);
+
+	updateResult();
+}
 
 function capaitalizeFirstLetter(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
@@ -99,7 +188,11 @@ function generatePOJO() {
 	return output;
 }
 
-window.onload = function() {
+function updateResult() {
 	var txtResult = document.getElementById('txtResult');
 	txtResult.value = generatePOJO();
+}
+
+window.onload = function() {
+	updateResult();
 }
