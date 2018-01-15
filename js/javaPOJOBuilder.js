@@ -2,6 +2,7 @@ function Data() {
 	this.className = "User";
 	this.fields = {};
 	this.fields[0] = new Field("username", true, "String");
+	this.builderSetterPrefix = "with";
 }
 
 function Field(name, isFinal, type) {
@@ -100,6 +101,13 @@ function addField() {
 	updateResult();
 }
 
+function changeBuilderSetterPrefix() {
+	var txtBuilderSetterPrefix = document.getElementById('txtBuilderSetterPrefix');
+	data.builderSetterPrefix = txtBuilderSetterPrefix.value;
+
+	updateResult();
+}
+
 function capaitalizeFirstLetter(str) {
 	return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -135,7 +143,9 @@ function getterFcn(field, indentSize) {
 
 function withFcn(field, indentSize) {
 	var output = "";
-	output += indent(2) + "public Builder with" + capaitalizeFirstLetter(field.name) + "(" + field.type + " " + field.name + ") {\n";
+	output += indent(2) + "public Builder "
+	output += data.builderSetterPrefix;
+	output += capaitalizeFirstLetter(field.name) + "(" + field.type + " " + field.name + ") {\n";
 	output += indent(3) + "this." + field.name + " = " + field.name + ";\n";
 	output += indent(3) + "return this;\n";
 	output += indent(2) + "}\n\n";
