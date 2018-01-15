@@ -1,13 +1,14 @@
 function Data() {
 	this.className = "User";
 	this.fields = {};
-	this.fields[0] = new Field("username", true, "String");
+	this.fields[0] = new Field("username", true, false, "String");
 	this.builderSetterPrefix = "with";
 }
 
-function Field(name, isFinal, type) {
+function Field(name, isFinal, hasSetter, type) {
 	this.name = name;
 	this.isFinal = isFinal;
+	this.hasSetter = hasSetter;
 	this.type = type;
 }
 
@@ -35,6 +36,13 @@ function changeFieldIsFinal(rowIdx) {
 	updateResult();
 }
 
+function changeFieldHasSetter(rowIdx) {
+	var field = data.fields[rowIdx];
+	var chkFieldHasSetter = document.getElementById('chkFieldHasSetter' + rowIdx);
+	field.hasSetter = chkFieldHasSetter.checked;
+	updateResult();
+}
+
 function changeFieldType(rowIdx) {
 	var field = data.fields[rowIdx];
 	var txtFieldType = document.getElementById('txtFieldType' + rowIdx);
@@ -46,7 +54,7 @@ function addField() {
 	lastRowAdded++;
 	var currentRow = lastRowAdded;
 	
-	data.fields[lastRowAdded] = new Field("fieldName" + lastRowAdded, true, "String");
+	data.fields[lastRowAdded] = new Field("fieldName" + lastRowAdded, true, false, "String");
 
 	var trField = document.createElement("tr");
 	trField.id = "trField" + lastRowAdded;
@@ -72,6 +80,17 @@ function addField() {
 	};
 	tdFieldFinal.appendChild(chkFieldFinal);
 	trField.appendChild(tdFieldFinal);
+
+	var tdFieldHasSetter = document.createElement("td");
+	var chkFieldHasSetter = document.createElement("input");
+	chkFieldHasSetter.id = "chkFieldHasSetter" + lastRowAdded;
+	chkFieldHasSetter.type = "checkbox";
+	chkFieldHasSetter.checked = false;
+	chkFieldHasSetter.onchange = function() {
+		changeFieldHasSetter(currentRow);	
+	};
+	tdFieldHasSetter.appendChild(chkFieldHasSetter);
+	trField.appendChild(tdFieldHasSetter);
 
 	var tdFieldType = document.createElement("td");
 	var txtFieldType = document.createElement("input");
@@ -141,6 +160,14 @@ function getterFcn(field, indentSize) {
 	return output;
 }
 
+function setterFcn(field, indentSize) {
+	var output = "";
+	output += indent(indentSize) + "public void set" + capaitalizeFirstLetter(field.name) + "(" + field.type + " " + field.name + ") {\n";
+	output += indent(indentSize + 1) + "this." + field.name + " = " + field.name + ";\n";
+	output += indent(indentSize) + "}\n\n";
+	return output;
+}
+
 function withFcn(field, indentSize) {
 	var output = "";
 	output += indent(2) + "public Builder "
@@ -167,9 +194,13 @@ function generatePOJO() {
 	}
 	output += indent(1) + "}\n\n";
 
-	// Getters
+	// Getters and Setters
 	for(var fieldIdx in data.fields) {
-		output += getterFcn(data.fields[fieldIdx], 1);
+		var field = data.fields[fieldIdx];
+		output += getterFcn(field, 1);
+		if(field.hasSetter) {
+			output += setterFcn(field, 1);
+		}
 	}
 
 	// Builder
@@ -178,7 +209,7 @@ function generatePOJO() {
 	// Builder's fields
 	for(var fieldIdx in data.fields) {
 		var field = data.fields[fieldIdx];
-		output += fieldStr(new Field(field.name, false, field.type), 2);
+		output += fieldStr(new Field(field.name, false, false, field.type), 2);
 	}
 
 	// Builder Setters
