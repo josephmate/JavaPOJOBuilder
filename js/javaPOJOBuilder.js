@@ -22,6 +22,12 @@ function removeField(rowIdx) {
 	updateResult();
 }
 
+function changeClassName() {
+	var txtClassName = document.getElementById('txtClassName');
+	data.className = txtClassName.value;
+	updateResult();
+}
+
 function changeFieldName(rowIdx) {
 	var field = data.fields[rowIdx];
 	var txtFieldName = document.getElementById('txtFieldName' + rowIdx);
