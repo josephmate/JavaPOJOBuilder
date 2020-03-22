@@ -139,8 +139,12 @@ function indent(numOfIndents) {
 	return output;
 }
 
-function classHeader(className, indentSize) {
-	return indent(indentSize) + "public class " + className + " {\n\n";
+function classHeader(className, indentSize, isStatic) {
+	var staticClassStr = "";
+	if (isStatic) {
+		staticClassStr = "static ";
+	}
+	return indent(indentSize) + "public " + staticClassStr + "class " + className + " {\n\n";
 }
 
 function fieldStr(field, indentSize) {
@@ -180,7 +184,7 @@ function withFcn(field, indentSize) {
 }
 
 function generatePOJO() {
-	var output = classHeader(data.className);
+	var output = classHeader(data.className, 0, false);
 
 	for(var fieldIdx in data.fields) {
 		output += fieldStr(data.fields[fieldIdx], 1);
@@ -204,7 +208,7 @@ function generatePOJO() {
 	}
 
 	// Builder
-	output += classHeader("Builder", 1);
+	output += classHeader("Builder", 1, true);
 
 	// Builder's fields
 	for(var fieldIdx in data.fields) {
